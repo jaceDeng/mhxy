@@ -1,0 +1,11 @@
+<Project Sdk="Godot.NET.Sdk/3.3.0">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+	<PropertyGroup>
+		<StartAction>Program</StartAction>
+		<StartProgram>E:\Godot_mono_win64\Godot.exe</StartProgram>
+		<StartArguments>--path $(SolutionDir) &gt; godot.log 2&gt;</StartArguments>
+	</PropertyGroup>
+</Project>

@@ -1,0 +1,125 @@
+//using Godot;
+//using System;
+//using System.Collections.Generic;
+
+//public class Was : Godot.Object
+//{
+//	private string path;
+//	private int offset;
+//	private int size;
+//	private string flag;
+//	private int head_size;
+//	private int direction_num;
+//	private int frame_num;
+//	private int pic_num;
+//	private int width;
+//	private int height;
+//	private int x;
+//	private int y;
+//	private Color[] pal;
+//	private List<long> pic_offsets = new List<long>();
+//	private List<List<Frame>> frames = new List<List<Frame>>();
+//	private List<int> time = new List<int>();
+
+//	public Was()
+//	{
+
+//	}
+
+//	public Was(string path, int offset = 0, int size = 0)
+//	{
+//		if (path == null) return;
+//		this.path = path;
+//		this.offset = offset;
+
+//		var file = new Godot.File();
+//		var err = file.Open(path, Godot.File.ModeFlags.Read);
+//		if (err != Error.Ok)
+//		{
+//			throw new System.IO.FileNotFoundException("File Not Existed");
+//		}
+
+//		if (size == 0)
+//		{
+//			file.SeekEnd();
+//			this.size = (int)file.GetPosition();
+//		}
+//		else
+//		{
+//			this.size = size;
+//		}
+//		file.Seek(offset);
+
+//		this.flag = file.GetBuffer(2).GetStringFromUTF8();
+
+//		this.head_size = file.Get16();
+
+//		this.direction_num = file.Get16();
+//	   // System.Diagnostics.Debug.WriteLine(direction_num);
+//		this.frame_num = file.Get16();
+//		this.pic_num = this.direction_num * this.frame_num;
+//		this.width = file.Get16();
+//		this.height = file.Get16();
+//		this.x = file.Get16();
+//		this.y = file.Get16();
+
+//		if (this.head_size > 12)
+//		{
+//			for (int i = 0; i < this.head_size - 12; i++)
+//			{
+//				this.time.Add(file.Get8());
+//			}
+//		}
+
+//		this.pal = Gdxy2.FormatPal(file.GetBuffer(512));
+
+//		for (int i = 0; i < this.pic_num; i++)
+//		{
+//			this.pic_offsets.Add(file.Get32() + this.offset + 4 + this.head_size);
+//		}
+
+//		this.frames = new List<List<Frame>>();
+//		for (int i = 0; i < this.direction_num; i++)
+//		{
+//			var tmpList = new List<Frame>();
+//			for (int j = 0; j < this.frame_num; j++)
+//			{
+//				var index = i * this.frame_num + j;
+//				file.Seek(this.pic_offsets[index]);
+//				var frame = new Frame(file.Get32(), file.Get32(), file.Get32(), file.Get32());
+
+
+//				long frame_size;
+//				if (index < this.pic_num - 1)
+//				{
+//					frame_size = this.pic_offsets[index + 1] - this.pic_offsets[index];
+//				}
+//				else
+//				{
+//					frame_size = this.size + this.offset - this.pic_offsets[index];
+//				}
+
+//				file.Seek(this.pic_offsets[index]);
+//				var buff = file.GetBuffer(frame_size + 16);
+//				byte[] pba = Gdxy2.ReadWas(buff, this.pal);
+
+//				var img = new Image();
+//				img.CreateFromData(frame.width, frame.height, false, Image.Format.Rgba8, pba);
+
+//				frame.Add(img);
+//				tmpList.Add(frame);
+//			}
+//			this.frames.Add(tmpList);
+//		}
+
+//		file.Close();
+//	}
+
+//	public Frame GetFrame(int d, int f)
+//	{
+//		return this.frames[d][f];
+//	}
+
+//}
+
+
